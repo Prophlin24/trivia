@@ -14,7 +14,7 @@ public class Game {
     LinkedList sportsQuestions = new LinkedList();
     LinkedList rockQuestions = new LinkedList();
     
-    int currentPlayer = 0;
+    final currentPlayer = 0;
     boolean isGettingOutOfPenaltyBox;
     
     public  Game(){
@@ -34,7 +34,7 @@ public class Game {
 		return (howManyPlayers() >= 2);
 	}
 
-	public boolean add(String playerName) {
+	public boolean addNewPlayer(String playerName) {
 		
 		
 	    players.add(playerName);
@@ -50,8 +50,19 @@ public class Game {
 	public int howManyPlayers() {
 		return players.size();
 	}
+        boolean hogerDanElf = places[currentPlayer] > 11;
+        public void beginOpnieuw(){
+            if (hogerDanElf) places[currentPlayer] = places[currentPlayer] - 12;
+				
+				System.out.println(players.get(currentPlayer) 
+						+ "'s new location is " 
+						+ places[currentPlayer]);
+				System.out.println("The category is " + currentCategory());
+				askQuestion();
+			}
+        }
 
-	public void roll(int roll) {
+	public void dubbelSteenroll(int roll) {
 		System.out.println(players.get(currentPlayer) + " is the current player");
 		System.out.println("They have rolled a " + roll);
 		
@@ -61,14 +72,17 @@ public class Game {
 				
 				System.out.println(players.get(currentPlayer) + " is getting out of the penalty box");
 				places[currentPlayer] = places[currentPlayer] + roll;
-				if (places[currentPlayer] > 11) places[currentPlayer] = places[currentPlayer] - 12;
+
+                                /*if (places[currentPlayer] > 11) places[currentPlayer] = places[currentPlayer] - 12;
 				
 				System.out.println(players.get(currentPlayer) 
 						+ "'s new location is " 
 						+ places[currentPlayer]);
 				System.out.println("The category is " + currentCategory());
 				askQuestion();
-			} else {
+                                */
+                                beginOpnieuw();
+				 else {
 				System.out.println(players.get(currentPlayer) + " is not getting out of the penalty box");
 				isGettingOutOfPenaltyBox = false;
 				}
@@ -76,13 +90,7 @@ public class Game {
 		} else {
 		
 			places[currentPlayer] = places[currentPlayer] + roll;
-			if (places[currentPlayer] > 11) places[currentPlayer] = places[currentPlayer] - 12;
-			
-			System.out.println(players.get(currentPlayer) 
-					+ "'s new location is " 
-					+ places[currentPlayer]);
-			System.out.println("The category is " + currentCategory());
-			askQuestion();
+			beginOpnieuw();
 		}
 		
 	}
@@ -112,10 +120,9 @@ public class Game {
 		return "Rock";
 	}
 
-	public boolean wasCorrectlyAnswered() {
-		if (inPenaltyBox[currentPlayer]){
-			if (isGettingOutOfPenaltyBox) {
-				System.out.println("Answer was correct!!!!");
+
+        public boolean correctAnswer() {
+        System.out.println("Answer was correct!!!!");
 				purses[currentPlayer]++;
 				System.out.println(players.get(currentPlayer) 
 						+ " now has "
@@ -127,6 +134,11 @@ public class Game {
 				if (currentPlayer == players.size()) currentPlayer = 0;
 				
 				return winner;
+}
+	public boolean wasCorrectlyAnswered() {
+		if (inPenaltyBox[currentPlayer]){
+			if (isGettingOutOfPenaltyBox) {
+				correctAnswer();
 			} else {
 				currentPlayer++;
 				if (currentPlayer == players.size()) currentPlayer = 0;
@@ -136,19 +148,7 @@ public class Game {
 			
 			
 		} else {
-		
-			System.out.println("Answer was corrent!!!!");
-			purses[currentPlayer]++;
-			System.out.println(players.get(currentPlayer) 
-					+ " now has "
-					+ purses[currentPlayer]
-					+ " Gold Coins.");
-			
-			boolean winner = didPlayerWin();
-			currentPlayer++;
-			if (currentPlayer == players.size()) currentPlayer = 0;
-			
-			return winner;
+			correctAnswer();
 		}
 	}
 	
